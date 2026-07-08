@@ -1,20 +1,16 @@
 package main
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+
+	"github.com/allan-araujo-lima/sezzle_test/backend/internal/calculator/routes"
 )
 
 func main() {
+
 	router := gin.Default()
 
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"status":  "running",
-			"message": "Calculator API is running!",
-		})
-	})
+	routes.RegisterRoutes(router)
 
 	router.Run(":8080")
 }

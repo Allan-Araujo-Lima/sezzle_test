@@ -1,17 +1,15 @@
 package routes
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+
+	"backend/sezzle_test/internal/calculator/handler"
+	"backend/sezzle_test/internal/calculator/service"
 )
 
 func RegisterRoutes(router *gin.Engine) {
+	calculatorService := service.NewCalculatorService()
+	calculatorHandler := handler.NewCalculatorHandler(calculatorService)
 
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"status": "running",
-		})
-	})
-
+	router.POST("/calculate", calculatorHandler.Calculate)
 }

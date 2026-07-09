@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 
-	"github.com/allan-araujo-lima/sezzle_test/backend/internal/calculator/routes"
+	"backend/sezzle_test/internal/calculator/routes"
 )
 
 func main() {

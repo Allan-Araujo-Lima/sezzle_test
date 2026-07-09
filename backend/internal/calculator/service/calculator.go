@@ -21,7 +21,21 @@ func (s *CalculatorService) Calculate(operation model.Operation, operand1, opera
 			return 0, ErrDivisionByZero
 		}
 		return operand1 / operand2, nil
+	case model.Exponent:
+		return pow(operand1, operand2), nil
+	case model.Square:
+		return operand1 * operand1, nil
+	case model.Percent:
+		return (operand1 / 100) * operand2, nil
 	default:
 		return 0, ErrInvalidOperation
 	}
+}
+
+func pow(operand1, operand2 float64) float64 {
+	result := 1.0
+	for i := 0; i < int(operand2); i++ {
+		result *= operand1
+	}
+	return result
 }

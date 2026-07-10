@@ -1,6 +1,10 @@
 package service
 
-import "backend/sezzle_test/internal/calculator/model"
+import (
+	"math"
+
+	"backend/sezzle_test/internal/calculator/model"
+)
 
 type CalculatorService struct{}
 
@@ -22,20 +26,15 @@ func (s *CalculatorService) Calculate(operation model.Operation, operand1, opera
 		}
 		return operand1 / operand2, nil
 	case model.Exponent:
-		return pow(operand1, operand2), nil
-	case model.Square:
-		return operand1 * operand1, nil
+		return math.Pow(operand1, operand2), nil
+	case model.SquareRoot:
+		if operand1 < 0 {
+			return 0, ErrNegativeRoot
+		}
+		return math.Sqrt(operand1), nil
 	case model.Percent:
 		return (operand1 / 100) * operand2, nil
 	default:
 		return 0, ErrInvalidOperation
 	}
-}
-
-func pow(operand1, operand2 float64) float64 {
-	result := 1.0
-	for i := 0; i < int(operand2); i++ {
-		result *= operand1
-	}
-	return result
 }

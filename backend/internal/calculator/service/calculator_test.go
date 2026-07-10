@@ -27,7 +27,10 @@ func TestCalculate(t *testing.T) {
 		{name: "divide", operation: model.Divide, operand1: 10, operand2: 4, want: 2.5},
 		{name: "divide by zero", operation: model.Divide, operand1: 10, operand2: 0, wantErr: ErrDivisionByZero},
 		{name: "exponent", operation: model.Exponent, operand1: 2, operand2: 3, want: 8},
-		{name: "square", operation: model.Square, operand1: 5, operand2: 0, want: 25},
+		{name: "exponent 2^6", operation: model.Exponent, operand1: 2, operand2: 6, want: 64},
+		{name: "exponent negative power", operation: model.Exponent, operand1: 2, operand2: -1, want: 0.5},
+		{name: "square root", operation: model.SquareRoot, operand1: 9, operand2: 0, want: 3},
+		{name: "square root of negative", operation: model.SquareRoot, operand1: -9, operand2: 0, wantErr: ErrNegativeRoot},
 		{name: "percent", operation: model.Percent, operand1: 50, operand2: 200, want: 100},
 		{name: "invalid operation", operation: model.Operation("no_operator"), operand1: 2, operand2: 3, wantErr: ErrInvalidOperation},
 	}

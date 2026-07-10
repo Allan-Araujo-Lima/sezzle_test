@@ -9,13 +9,26 @@ type KeypadProps = {
     clear: () => void
     backspace: () => void
     toggleSign: () => void
+    applyUnary: (operator: Operator) => void
     isLoading: boolean
     activeOperation: Operator | null
 }
 
 export function Keypad(props: KeypadProps) {
     return (
-        <div className="calculator-keypad">
+        <>
+            <div className="calculator-functions">
+                <Button variant="function" onClick={() => props.applyUnary('squareRoot')}>√</Button>
+                <Button
+                    variant="function"
+                    isActive={props.activeOperation === 'exponent'}
+                    onClick={() => props.chooseOperation('exponent')}
+                >
+                    x<sup>y</sup>
+                </Button>
+            </div>
+
+            <div className="calculator-keypad">
             <Button variant="action" onClick={props.clear}>C</Button>
             <Button variant="action" onClick={props.backspace}>⌫</Button>
             <Button variant="action" onClick={props.toggleSign}>±</Button>
@@ -40,6 +53,7 @@ export function Keypad(props: KeypadProps) {
             <Button onClick={props.inputDecimal}>.</Button>
             <Button variant="operation" isActive={props.activeOperation === 'percent'} onClick={() => props.chooseOperation('percent')}>%</Button>
             <Button variant="equals" disabled={props.isLoading} onClick={() => void props.calculate()}>=</Button>
-        </div>
+            </div>
+        </>
     )
 }

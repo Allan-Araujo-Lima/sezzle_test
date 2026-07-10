@@ -48,4 +48,5 @@ export type Operator =
     | "divide"
     | "exponent"
     | "square"
+    | "squareRoot"
     | "percent";

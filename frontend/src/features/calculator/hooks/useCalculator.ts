@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { CalculatorState, HistoryEntry, Operator } from "../../../interfaces/calculator";
+import type { CalcRequest, CalculatorState, HistoryEntry, Operator } from "../../../interfaces/calculator";
 import { calculateApi } from "../api/calculate";
 
 const MAX_HISTORY_ENTRIES = 30;
@@ -180,20 +180,13 @@ export function useCalculator() {
         });
     }, []);
 
-    const calculate = useCallback(async () => {
+    const runCalculation = useCallback(async (request: CalcRequest) => {
         abortRef.current?.abort();
 
         const controller = new AbortController();
         const requestId = requestIdRef.current + 1;
         abortRef.current = controller;
         requestIdRef.current = requestId;
-
-        const activeValue = parseDisplayValue(state.displayValue);
-        const request = {
-            operand1: state.activeOperand === 'operand1' ? activeValue : state.operand1,
-            operand2: state.activeOperand === 'operand2' ? activeValue : state.operand2,
-            operation: state.operation,
-        };
 
         setIsLoading(true);
         setError(null);
@@ -236,13 +229,31 @@ export function useCalculator() {
                 setIsLoading(false);
             }
         }
+    }, []);
+
+    const calculate = useCallback(async () => {
+        const activeValue = parseDisplayValue(state.displayValue);
+
+        await runCalculation({
+            operand1: state.activeOperand === 'operand1' ? activeValue : state.operand1,
+            operand2: state.activeOperand === 'operand2' ? activeValue : state.operand2,
+            operation: state.operation,
+        });
     }, [
+        runCalculation,
         state.activeOperand,
         state.displayValue,
         state.operand1,
         state.operand2,
         state.operation,
     ]);
+
+    /** Unary operations (√, x²) apply immediately to the current display value. */
+    const applyUnary = useCallback(async (operation: Operator) => {
+        const value = parseDisplayValue(state.displayValue);
+
+        await runCalculation({ operand1: value, operand2: 0, operation });
+    }, [runCalculation, state.displayValue]);
 
     const clear = useCallback(() => {
         abortRef.current?.abort();
@@ -355,6 +366,7 @@ export function useCalculator() {
         updateOperand2,
         updateOperation,
         calculate,
+        applyUnary,
         clear,
         clearHistory,
         recallValue,

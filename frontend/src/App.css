@@ -208,11 +208,52 @@ main {
   color: #ff6b6b;
 }
 
+.calculator-functions {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
 .calculator-keypad {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
   justify-items: center;
+}
+
+/* √ and x² — unary functions, applied immediately to the display value. */
+.calculator-button.calculator-button--function {
+  flex: 1;
+  width: auto;
+  height: 46px;
+  border-radius: 16px;
+  font-size: 19px;
+  color: var(--calc-op-from);
+  background: rgba(138, 99, 196, 0.14);
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.05) inset;
+}
+
+.calculator-button.calculator-button--function:hover {
+  filter: none;
+  background: rgba(138, 99, 196, 0.24);
+}
+
+.calculator-button--function sup {
+  font-size: 0.62em;
+  margin-left: 1px;
+}
+
+/* xʸ selected — waiting for the exponent to be typed. */
+.calculator-button.calculator-button--function.calculator-button--active {
+  color: #fff;
+  background: linear-gradient(150deg, var(--calc-op-from) 0%, var(--calc-op-to) 100%);
+  box-shadow:
+    0 0 0 3px rgba(138, 99, 196, 0.45),
+    0 8px 18px -8px rgba(104, 68, 164, 0.8);
+}
+
+.calculator-button.calculator-button--function.calculator-button--active:hover {
+  background: linear-gradient(150deg, var(--calc-op-from) 0%, var(--calc-op-to) 100%);
 }
 
 .calculator-button {

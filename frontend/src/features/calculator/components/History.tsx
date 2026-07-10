@@ -1,5 +1,17 @@
 import type { HistoryEntry } from "../../../interfaces/calculator";
-import { OPERATOR_SYMBOLS } from "../utils/operators";
+import { OPERATOR_SYMBOLS, UNARY_OPERATORS } from "../utils/operators";
+
+function formatExpression(entry: HistoryEntry): string {
+    const symbol = OPERATOR_SYMBOLS[entry.operation];
+
+    if (UNARY_OPERATORS.has(entry.operation)) {
+        return entry.operation === 'squareRoot'
+            ? `${symbol}${entry.operand1}`
+            : `${entry.operand1}${symbol}`;
+    }
+
+    return `${entry.operand1} ${symbol} ${entry.operand2}`;
+}
 
 type HistoryProps = {
     entries: HistoryEntry[]
@@ -32,7 +44,7 @@ export function History({ entries, onSelect, onClear }: HistoryProps) {
                                 title="Use this result in the calculator"
                             >
                                 <span className="calculator-history__expr">
-                                    {entry.operand1} {OPERATOR_SYMBOLS[entry.operation]} {entry.operand2}
+                                    {formatExpression(entry)}
                                 </span>
                                 <span className="calculator-history__result">= {entry.result}</span>
                             </button>

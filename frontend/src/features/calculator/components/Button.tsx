@@ -3,7 +3,7 @@ type ButtonProps = {
     onClick: () => void
     disabled?: boolean
     isActive?: boolean
-    variant?: 'number' | 'operation' | 'equals' | 'action'
+    variant?: 'number' | 'operation' | 'equals' | 'action' | 'function'
 }
 
 export function Button({ children, onClick, disabled = false, isActive = false, variant = 'number' }: ButtonProps) {

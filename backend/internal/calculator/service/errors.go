@@ -7,5 +7,9 @@ var (
 )
 
 var (
+	ErrNegativeRoot = errors.New("cannot take the square root of a negative number")
+)
+
+var (
 	ErrInvalidOperation = errors.New("invalid operation")
 )

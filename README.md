@@ -15,6 +15,7 @@ A full-stack calculator application composed of a **Go (Gin)** REST API and a **
 - [API Reference](#api-reference)
   - [Supported operations](#supported-operations)
   - [Example calls](#example-calls)
+- [Testing & Coverage](#testing--coverage)
 - [Design Decisions](#design-decisions)
 
 ---
@@ -213,6 +214,60 @@ curl -X POST http://localhost:8080/calculate \
   -d '{"operation":"divide","operand1":1,"operand2":0}'
 # → 400 {"error":"division by zero"}
 ```
+
+---
+
+## Testing & Coverage
+
+Both sides ship unit tests. The backend uses Go's built-in `testing` package with
+table-driven tests; the frontend uses **Vitest** + **React Testing Library**, with
+the API layer mocked so no running backend is required.
+
+### Backend
+
+```bash
+cd backend
+
+# Run all tests
+go test ./...
+
+# Run with a coverage summary
+go test ./... -cover
+
+# Generate a coverage profile and a per-function breakdown
+go test ./... -coverprofile=coverage.out
+go tool cover -func=coverage.out
+
+# Open an HTML coverage report
+go tool cover -html=coverage.out -o coverage.html
+```
+
+**What's covered:** the service (all arithmetic paths and every domain error),
+the HTTP handler (success, validation, malformed JSON), the CORS middleware
+(headers + preflight), and route registration. All application logic is at
+**100%**; the only uncovered code is the `main` entry point and generated Swagger
+docs, so the overall statement coverage is ~86%.
+
+### Frontend
+
+```bash
+cd frontend
+
+# Run all tests
+npm run test
+
+# Run with a coverage report (text + HTML + lcov)
+npm run test:coverage
+```
+
+The HTML report is written to `frontend/coverage/index.html`.
+
+**What's covered:** the `useCalculator` hook (input, operations, percent logic,
+history, keyboard handling, error handling), the HTTP client (`lib/http.ts`),
+the API client (`api/calculate.ts`), and UI components. Statement coverage is
+~92%, with **100% of functions** exercised. Bootstrap files (`main.tsx`,
+`App.tsx`) and type-only modules are excluded from the coverage numbers via
+`vite.config.ts`.
 
 ---
 

@@ -42,8 +42,124 @@ main {
   margin: 8px 0 0 12px;
 }
 
-.calculator {
+/* Center the calculator (+ history) in the space left below the logo. */
+.calculator-layout {
   margin: auto;
+  display: flex;
+  align-items: stretch;
+  gap: 22px;
+}
+
+@media (max-width: 720px) {
+  .calculator-layout {
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+}
+
+/* ---------------------------------------------------------------- History */
+.calculator-history {
+  display: flex;
+  flex-direction: column;
+  width: 210px;
+  padding: 18px;
+  border-radius: 28px;
+  background: linear-gradient(165deg, rgba(50, 42, 78, 0.55), rgba(37, 30, 61, 0.55));
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 30px 70px -24px rgba(0, 0, 0, 0.6);
+}
+
+.calculator-history__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  color: var(--calc-text);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.calculator-history__clear {
+  border: none;
+  background: transparent;
+  color: var(--calc-text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 8px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.calculator-history__clear:hover {
+  color: var(--calc-equals-from);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.calculator-history__empty {
+  margin: auto 0;
+  text-align: center;
+  color: var(--calc-text-muted);
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.calculator-history__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+  max-height: 420px;
+}
+
+.calculator-history__item {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  text-align: right;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.calculator-history__item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.calculator-history__item:active {
+  transform: scale(0.98);
+}
+
+.calculator-history__expr {
+  font-size: 12px;
+  color: var(--calc-text-muted);
+}
+
+.calculator-history__result {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--calc-text);
+}
+
+@media (max-width: 720px) {
+  .calculator-history {
+    width: 328px;
+    max-width: 100%;
+  }
+
+  .calculator-history__list {
+    max-height: 160px;
+  }
 }
 
 .calculator {
@@ -143,6 +259,20 @@ main {
   box-shadow:
     0 8px 18px -8px rgba(104, 68, 164, 0.9),
     0 1px 0 0 rgba(255, 255, 255, 0.14) inset;
+}
+
+/* Selected operator — inverted + ring so it's clear which op is pending. */
+.calculator-button--operation.calculator-button--active {
+  color: var(--calc-op-from);
+  background: #fff;
+  box-shadow:
+    0 0 0 3px rgba(138, 99, 196, 0.55),
+    0 8px 20px -6px rgba(138, 99, 196, 0.7);
+}
+
+.calculator-button--operation.calculator-button--active:hover {
+  filter: none;
+  background: #fff;
 }
 
 .calculator-button--equals {

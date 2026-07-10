@@ -21,6 +21,14 @@ export interface CalcResponse {
     result: number;
 }
 
+export interface HistoryEntry {
+    id: number;
+    operand1: number;
+    operand2: number;
+    operation: Operator;
+    result: number;
+}
+
 export interface CalculatorState {
     operand1: number;
     operand2: number;

@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { CalculatorState, Operator } from "../../../interfaces/calculator";
+import type { CalculatorState, HistoryEntry, Operator } from "../../../interfaces/calculator";
 import { calculateApi } from "../api/calculate";
+
+const MAX_HISTORY_ENTRIES = 30;
 
 const initialState: CalculatorState = {
     operand1: 0,
@@ -51,8 +53,10 @@ export function useCalculator() {
     const [state, setState] = useState<CalculatorState>(initialState);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [history, setHistory] = useState<HistoryEntry[]>([]);
     const abortRef = useRef<AbortController | null>(null);
     const requestIdRef = useRef(0);
+    const historyIdRef = useRef(0);
 
     const updateOperand1 = useCallback((operand1: number) => {
         setError(null);
@@ -199,6 +203,16 @@ export function useCalculator() {
 
             if (requestIdRef.current !== requestId) return;
 
+            historyIdRef.current += 1;
+            const entry: HistoryEntry = {
+                id: historyIdRef.current,
+                operand1: request.operand1,
+                operand2: request.operand2,
+                operation: request.operation,
+                result: response.result,
+            };
+            setHistory((prevHistory) => [entry, ...prevHistory].slice(0, MAX_HISTORY_ENTRIES));
+
             setState((prevState) => ({
                 ...prevState,
                 ...request,
@@ -236,6 +250,23 @@ export function useCalculator() {
         setState(initialState);
         setIsLoading(false);
         setError(null);
+    }, []);
+
+    const clearHistory = useCallback(() => {
+        setHistory([]);
+    }, []);
+
+    const recallValue = useCallback((value: number) => {
+        abortRef.current?.abort();
+        requestIdRef.current += 1;
+        setIsLoading(false);
+        setError(null);
+        setState({
+            ...initialState,
+            operand1: value,
+            displayValue: formatDisplayValue(value),
+            shouldResetDisplay: true,
+        });
     }, []);
 
     const handleKeyDown = useCallback((event: KeyboardEvent) => {
@@ -314,6 +345,7 @@ export function useCalculator() {
         state,
         isLoading,
         error,
+        history,
         inputDigit,
         inputDecimal,
         chooseOperation,
@@ -324,5 +356,7 @@ export function useCalculator() {
         updateOperation,
         calculate,
         clear,
+        clearHistory,
+        recallValue,
     };
 }

@@ -1,7 +1,13 @@
 export interface Calculator {
     state: CalculatorState;
-    setState: (state: CalculatorState) => void;
-    calculate: () => void;
+    isLoading: boolean;
+    error: string | null;
+    inputDigit: (digit: string) => void;
+    inputDecimal: () => void;
+    chooseOperation: (operation: Operator) => void;
+    toggleSign: () => void;
+    backspace: () => void;
+    calculate: () => Promise<void>;
     clear: () => void;
 }
 
@@ -20,7 +26,12 @@ export interface CalculatorState {
     operand2: number;
     operation: Operator;
     result: number | null;
+    displayValue: string;
+    activeOperand: CalculatorOperand;
+    shouldResetDisplay: boolean;
 }
+
+export type CalculatorOperand = "operand1" | "operand2";
 
 export type Operator =
     | "add"

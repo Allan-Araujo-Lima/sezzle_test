@@ -23,7 +23,6 @@ export async function post<TResponse, TBody = unknown>(
     })
 
     if (!res.ok) {
-        // o handler Go devolve { error: "..." } em 400
         const message = await res
             .json()
             .then((data) => data?.error ?? res.statusText)

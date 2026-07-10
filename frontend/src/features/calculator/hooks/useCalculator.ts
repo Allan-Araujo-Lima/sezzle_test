@@ -255,6 +255,36 @@ export function useCalculator() {
         await runCalculation({ operand1: value, operand2: 0, operation });
     }, [runCalculation, state.displayValue]);
 
+    /**
+     * Percent is applied immediately and depends on context:
+     *  - With a pending operation (e.g. `100 + 5` then %): the current value is
+     *    read as a percentage of the first operand and the pending operation is
+     *    applied, so `100 + 5%` => 100 + (5% of 100) = 105.
+     *  - Without a pending operation (e.g. `50` then %): the value is divided by
+     *    100, so `50%` => 0.5.
+     */
+    const applyPercent = useCallback(async () => {
+        const current = parseDisplayValue(state.displayValue);
+
+        if (state.activeOperand === 'operand2') {
+            // For + and −, the percent is relative to the first operand (5% of 100).
+            // For × and ÷, the percent is just the value as a fraction (5% => 0.05).
+            const isRelative = state.operation === 'add' || state.operation === 'subtract';
+            const operand2 = isRelative
+                ? (state.operand1 * current) / 100
+                : current / 100;
+
+            await runCalculation({
+                operand1: state.operand1,
+                operand2,
+                operation: state.operation,
+            });
+            return;
+        }
+
+        await runCalculation({ operand1: current, operand2: 100, operation: 'divide' });
+    }, [runCalculation, state.activeOperand, state.displayValue, state.operand1, state.operation]);
+
     const clear = useCallback(() => {
         abortRef.current?.abort();
         requestIdRef.current += 1;
@@ -313,6 +343,12 @@ export function useCalculator() {
             return;
         }
 
+        if (event.key === '%') {
+            event.preventDefault();
+            void applyPercent();
+            return;
+        }
+
         const operationsByKey: Partial<Record<string, Operator>> = {
             '+': 'add',
             '-': 'subtract',
@@ -321,7 +357,6 @@ export function useCalculator() {
             X: 'multiply',
             '/': 'divide',
             '^': 'exponent',
-            '%': 'percent',
         };
         const operation = operationsByKey[event.key];
 
@@ -330,6 +365,7 @@ export function useCalculator() {
             chooseOperation(operation);
         }
     }, [
+        applyPercent,
         backspace,
         calculate,
         chooseOperation,
@@ -367,6 +403,7 @@ export function useCalculator() {
         updateOperation,
         calculate,
         applyUnary,
+        applyPercent,
         clear,
         clearHistory,
         recallValue,

@@ -10,6 +10,7 @@ type KeypadProps = {
     backspace: () => void
     toggleSign: () => void
     applyUnary: (operator: Operator) => void
+    applyPercent: () => void
     isLoading: boolean
     activeOperation: Operator | null
 }
@@ -51,7 +52,7 @@ export function Keypad(props: KeypadProps) {
 
             <Button onClick={() => props.inputDigit('0')}>0</Button>
             <Button onClick={props.inputDecimal}>.</Button>
-            <Button variant="operation" isActive={props.activeOperation === 'percent'} onClick={() => props.chooseOperation('percent')}>%</Button>
+            <Button variant="operation" onClick={props.applyPercent}>%</Button>
             <Button variant="equals" disabled={props.isLoading} onClick={() => void props.calculate()}>=</Button>
             </div>
         </>

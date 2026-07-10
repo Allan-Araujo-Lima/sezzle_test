@@ -32,6 +32,7 @@ export function Calculator() {
                     backspace={calculator.backspace}
                     toggleSign={calculator.toggleSign}
                     applyUnary={calculator.applyUnary}
+                    applyPercent={calculator.applyPercent}
                     isLoading={calculator.isLoading}
                     activeOperation={activeOperation}
                 />

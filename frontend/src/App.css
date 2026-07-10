@@ -45,16 +45,29 @@ main {
 /* Center the calculator (+ history) in the space left below the logo. */
 .calculator-layout {
   margin: auto;
+  max-width: 100%;
   display: flex;
   align-items: stretch;
   gap: 22px;
 }
 
 @media (max-width: 720px) {
+  main {
+    justify-content: flex-start;
+    padding: 16px;
+  }
+
+  .calculator-logo {
+    margin: 4px 0 0 4px;
+  }
+
+  /* Stack below the logo with a fixed gap instead of relying on auto-margins
+     (which collapse and glue the calculator to the logo on short screens). */
   .calculator-layout {
     flex-direction: column;
     align-items: center;
     gap: 18px;
+    margin: 24px auto 0;
   }
 }
 
@@ -62,6 +75,7 @@ main {
 .calculator-history {
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
   width: 210px;
   padding: 18px;
   border-radius: 28px;
@@ -163,8 +177,9 @@ main {
 }
 
 .calculator {
-  width: 328px;
+  width: 356px;
   max-width: 100%;
+  box-sizing: border-box;
   padding: 30px 26px 30px;
   border-radius: 36px;
   background: linear-gradient(165deg, #322a4e 0%, #251e3d 100%);
@@ -225,6 +240,8 @@ main {
 .calculator-button.calculator-button--function {
   flex: 1;
   width: auto;
+  max-width: none;
+  aspect-ratio: auto;
   height: 46px;
   border-radius: 16px;
   font-size: 19px;
@@ -257,8 +274,9 @@ main {
 }
 
 .calculator-button {
-  width: 64px;
-  height: 64px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: 68px;
   border: none;
   border-radius: 50%;
   font-size: 23px;

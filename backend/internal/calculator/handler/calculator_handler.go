@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"backend/sezzle_test/internal/calculator/model"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,6 +19,17 @@ func NewCalculatorHandler(calculatorService *service.CalculatorService) *Calcula
 	}
 }
 
+// Calculate godoc
+//
+//	@Summary		Calculate the result of an operation
+//	@Description	Receives two operands and an operation and returns the result. Unary operations (squareRoot) use only operand1.
+//	@Tags			calculator
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		model.Request	true	"Operation and operands"
+//	@Success		200		{object}	model.Response
+//	@Failure		400		{object}	model.ErrorResponse
+//	@Router			/calculate [post]
 func (h *CalculatorHandler) Calculate(c *gin.Context) {
 	var request model.Request
 
@@ -36,7 +48,7 @@ func (h *CalculatorHandler) Calculate(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"result": result,
+	c.JSON(http.StatusOK, model.Response{
+		Result: result,
 	})
 }

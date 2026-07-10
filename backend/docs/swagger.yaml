@@ -1,0 +1,82 @@
+basePath: /
+definitions:
+  model.ErrorResponse:
+    properties:
+      error:
+        example: invalid operation
+        type: string
+    type: object
+  model.Operation:
+    enum:
+    - add
+    - subtract
+    - multiply
+    - divide
+    - exponent
+    - squareRoot
+    - percent
+    type: string
+    x-enum-varnames:
+    - Add
+    - Subtract
+    - Multiply
+    - Divide
+    - Exponent
+    - SquareRoot
+    - Percent
+  model.Request:
+    properties:
+      operand1:
+        example: 2
+        type: number
+      operand2:
+        example: 3
+        type: number
+      operation:
+        allOf:
+        - $ref: '#/definitions/model.Operation'
+        example: add
+    type: object
+  model.Response:
+    properties:
+      result:
+        example: 5
+        type: number
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Calculation API for the Sezzle calculator.
+  title: Sezzle Calculator API
+  version: "1.0"
+paths:
+  /calculate:
+    post:
+      consumes:
+      - application/json
+      description: Receives two operands and an operation and returns the result.
+        Unary operations (squareRoot) use only operand1.
+      parameters:
+      - description: Operation and operands
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.Request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Calculate the result of an operation
+      tags:
+      - calculator
+schemes:
+- http
+swagger: "2.0"

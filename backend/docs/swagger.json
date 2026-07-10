@@ -1,0 +1,118 @@
+{
+    "schemes": [
+        "http"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Calculation API for the Sezzle calculator.",
+        "title": "Sezzle Calculator API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/calculate": {
+            "post": {
+                "description": "Receives two operands and an operation and returns the result. Unary operations (squareRoot) use only operand1.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "calculator"
+                ],
+                "summary": "Calculate the result of an operation",
+                "parameters": [
+                    {
+                        "description": "Operation and operands",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Request"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "invalid operation"
+                }
+            }
+        },
+        "model.Operation": {
+            "type": "string",
+            "enum": [
+                "add",
+                "subtract",
+                "multiply",
+                "divide",
+                "exponent",
+                "squareRoot",
+                "percent"
+            ],
+            "x-enum-varnames": [
+                "Add",
+                "Subtract",
+                "Multiply",
+                "Divide",
+                "Exponent",
+                "SquareRoot",
+                "Percent"
+            ]
+        },
+        "model.Request": {
+            "type": "object",
+            "properties": {
+                "operand1": {
+                    "type": "number",
+                    "example": 2
+                },
+                "operand2": {
+                    "type": "number",
+                    "example": 3
+                },
+                "operation": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.Operation"
+                        }
+                    ],
+                    "example": "add"
+                }
+            }
+        },
+        "model.Response": {
+            "type": "object",
+            "properties": {
+                "result": {
+                    "type": "number",
+                    "example": 5
+                }
+            }
+        }
+    }
+}

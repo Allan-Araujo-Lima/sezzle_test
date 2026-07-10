@@ -12,6 +12,8 @@ export default defineConfig({
   },
   plugins: [
     react(),
-    babel({ presets: [reactCompilerPreset()] }),
+    // The React Compiler isn't needed to run tests and interferes with the
+    // JSX transform under Vitest, so only apply it outside of tests.
+    ...(process.env.VITEST ? [] : [babel({ presets: [reactCompilerPreset()] })]),
   ],
 })

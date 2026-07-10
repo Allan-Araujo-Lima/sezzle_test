@@ -1,0 +1,25 @@
+.git
+.gitignore
+
+# Frontend
+frontend/node_modules
+frontend/dist
+frontend/dist-ssr
+**/*.local
+
+# Backend
+backend/tmp
+backend/bin
+backend/dist
+backend/build
+backend/coverage.out
+backend/coverage.html
+
+# Editores
+.vscode
+.idea
+.DS_Store
+
+# Env
+**/.env
+**/.env.*
